@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="mediumTS"> 20dp </dimen>
+    <dimen name="largeTS"> 24dp</dimen>
+    
+    <dimen name="marginTOP">20dp</dimen>
+    <dimen name="imageHeight">270dp</dimen>
+    <dimen name="imageWight">150dp</dimen>
+    <dimen name="marginView">10dp</dimen>
+    <dimen name="marginContainer">7dp </dimen>
+</resources>

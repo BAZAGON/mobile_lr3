@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Detail">
+
+        <ImageView
+            android:id="@+id/portal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/imageHeight"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/marginContainer"
+            android:src="@drawable/portal">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/DetImage"
+            android:layout_width="@dimen/imageWight"
+            android:layout_height="@dimen/imageHeight"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/marginContainer">
+         </ImageView>
+
+
+        <TextView
+            android:id="@+id/DetName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Name"
+            android:layout_marginTop="@dimen/marginView"
+            android:layout_below="@+id/DetImage"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/largeTS"
+            android:textColor="@color/blue">
+        </TextView>
+
+        <TextView
+            android:id="@+id/meets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/DetName"
+            android:layout_marginLeft="@dimen/marginContainer"
+            android:layout_marginTop="@dimen/marginView"
+            android:text="Появление: "
+            android:textSize="@dimen/mediumTS"
+            android:textColor="@color/green">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/DetDescrip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/DetName"
+            android:layout_toRightOf="@+id/meets"
+            android:layout_marginLeft="@dimen/marginView"
+            android:layout_marginTop="@dimen/marginView"
+            android:text="Description"
+            android:textSize="@dimen/mediumTS"
+            android:textColor="@color/green">
+        </TextView>
+
+    </RelativeLayout>
+
+
+
+
+</ScrollView>
+
+
