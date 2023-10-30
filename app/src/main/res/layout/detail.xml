@@ -55,18 +55,15 @@
 
         </TextView>
 
-        <TextView
-            android:id="@+id/DetDescrip"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/DetName"
             android:layout_toRightOf="@+id/meets"
-            android:layout_marginLeft="@dimen/marginView"
-            android:layout_marginTop="@dimen/marginView"
-            android:text="Description"
-            android:textSize="@dimen/mediumTS"
-            android:textColor="@color/green">
-        </TextView>
+            android:layout_below="@+id/DetName"
+            android:layout_marginTop="@dimen/marginView">
+        </androidx.recyclerview.widget.RecyclerView>
+
 
     </RelativeLayout>
 

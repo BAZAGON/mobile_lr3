@@ -1,14 +1,16 @@
 package com.example.ml_2;
 
-import android.graphics.Picture;
+import com.google.gson.annotations.SerializedName;
 
 public class Character {
-    private String name;
-    private int PictureResourse;
+    @SerializedName("name")
+    public String name;
+    @SerializedName("image")
+    public String PictureResourse;
+    @SerializedName("episode")
+    public String[] description;
 
-    private String description;
-
-    public Character(String name, int picture, String description) {
+    public Character(String name, String picture, String[] description) {
         this.name = name;
         this.PictureResourse = picture;
         this.description = description;
@@ -22,17 +24,17 @@ public class Character {
         this.name = name;
     }
 
-    public int getPictureResourse() {
+    public String getPictureResourse() {
         return this.PictureResourse;
     }
 
-    public void setPictureResourse(int PictureResource) {
+    public void setPictureResourse(String PictureResource) {
         this.PictureResourse = PictureResource;
     }
 
-    public String getDescription() {
+    public String[] getDescription() {
         return this.description;
     }
 
-    public void setDescription(String description) {this.description = description; }
+    public void setDescription(String[] description) {this.description = description; }
 }
