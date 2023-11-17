@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements recycleRevievInte
     public static final String URL_base = "https://rickandmortyapi.com/";
     List<Character> Characters = new ArrayList<Character>();
     CharactersList Chars;
+    DBRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements recycleRevievInte
                     return;
                 }
                 Chars = response.body();
+                loadIntoDB(Chars,repository);
                 SetData();
                 RecyclerView recyclerView = configureRecyclerView();
 
@@ -61,6 +63,15 @@ public class MainActivity extends AppCompatActivity implements recycleRevievInte
         });
 
     }
+
+    public void loadIntoDB(CharactersList list, DBRepository rep){
+        rep.ClearAll();
+
+        for(int i = 0; i < list.CharacterList.size(); i++){
+            rep.Insert(list.CharacterList.get(i));
+        }
+    }
+
     private void SetData(){
         String name, photo;
         String[] desk;
