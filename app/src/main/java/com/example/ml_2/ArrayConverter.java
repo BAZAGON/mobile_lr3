@@ -5,7 +5,7 @@ import androidx.room.TypeConverter;
 import com.google.gson.Gson;
 
 public class ArrayConverter {
-    private static Gson gson = new Gson();
+    public static Gson gson = new Gson();
 
     @TypeConverter
     public static String[] fromString(String value) {

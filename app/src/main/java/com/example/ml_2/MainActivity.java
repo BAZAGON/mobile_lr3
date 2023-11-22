@@ -3,15 +3,17 @@ package com.example.ml_2;
 import static com.google.android.material.internal.ContextUtils.getActivity;
 
 import com.google.gson.annotations.SerializedName;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.room.Room;
 
-import android.app.Fragment;
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
-import java.util.ArrayList;
-import java.util.List;
+
+
 import android.content.Intent;
 import android.util.Log;
 import retrofit2.Call;
@@ -24,14 +26,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements recycleRevievInterface{
 
     public static final String URL_base = "https://rickandmortyapi.com/";
-    List<Character> Characters = new ArrayList<Character>();
-    CharactersList Chars;
-    DBRepository repository;
-
+    public CharactersList Chars = new CharactersList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DBRepository rep = new DBRepository(getApplication());
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL_base)
@@ -43,65 +44,60 @@ public class MainActivity extends AppCompatActivity implements recycleRevievInte
 
         Call<CharactersList> call = apiInterface.getInfo();
 
-        call.enqueue(new Callback<CharactersList>() {
-            @Override
-            public void onResponse(Call<CharactersList> call, Response<CharactersList> response) {
-                if(!response.isSuccessful()){
-                    Log.d("onResponse().", "Code: " + response.code());
-                    return;
+        if(IsOnline()) {
+            call.enqueue(new Callback<CharactersList>() {
+                @Override
+                public void onResponse(Call<CharactersList> call, Response<CharactersList> response) {
+                    if (!response.isSuccessful()) {
+                        Log.d("onResponse().", "Code: " + response.code());
+                        return;
+                    }
+                    Chars = response.body();
+                    configureRecyclerView();
+                    //загрузка данных в бд
+                    rep.ClearAll();
+                    for (int i = 0; i < Chars.CharacterList.size(); i++) {
+                        rep.Insert(Chars.CharacterList.get(i));
+                    }
+
                 }
-                Chars = response.body();
-                loadIntoDB(Chars,repository);
-                SetData();
-                RecyclerView recyclerView = configureRecyclerView();
 
-            }
-            @Override
-            public void onFailure(Call<CharactersList> call, Throwable t) {
-                Log.d("onFailure(): ", t.getMessage(), t);
-            }
-        });
-
-    }
-
-    public void loadIntoDB(CharactersList list, DBRepository rep){
-        rep.ClearAll();
-
-        for(int i = 0; i < list.CharacterList.size(); i++){
-            rep.Insert(list.CharacterList.get(i));
+                @Override
+                public void onFailure(Call<CharactersList> call, Throwable t) {
+                    Log.d("onFailure(): ", t.getMessage(), t);
+                }
+            });
+        }
+        else {
+            Chars.CharacterList = rep.getAllChars();
+            configureRecyclerView();
         }
     }
 
-    private void SetData(){
-        String name, photo;
-        String[] desk;
-        for(int i = 0; i < Chars.CharacterList.size(); i++){
-            name = Chars.CharacterList.get(i).getName();
-            photo = Chars.CharacterList.get(i).getPictureResourse();
-            desk = Chars.CharacterList.get(i).getDescription();
-
-            Characters.add(new Character(name,photo,desk));
-        }
+    protected boolean IsOnline(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
-    private RecyclerView configureRecyclerView() {
-        CharacterAdapter adapter = new CharacterAdapter(this, Characters, this);
+
+    private void configureRecyclerView() {
+        CharacterAdapter adapter = new CharacterAdapter(this, Chars.CharacterList, this);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setAdapter(adapter);
-
-        return recyclerView;
     }
 
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(this, Detail.class);
 
-        intent.putExtra("NAME", Characters.get(position).getName());
-        intent.putExtra("IMAGE", Characters.get(position).getPictureResourse());
-        intent.putExtra("DESCRIPTION", Characters.get(position).getDescription());
+        intent.putExtra("ID",Chars.CharacterList.get(position).getId());
+        intent.putExtra("NAME", Chars.CharacterList.get(position).getName());
+        intent.putExtra("IMAGE", Chars.CharacterList.get(position).getPictureResourse());
+        intent.putExtra("DESCRIPTION", Chars.CharacterList.get(position).getDescription());
 
 
         startActivity(intent);
     }
+
 
 }

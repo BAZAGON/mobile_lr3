@@ -12,16 +12,18 @@ import java.util.List;
 public interface DAOChraracter {
 
     @Insert
-    public void addCharacter(Character character);
+    void addCharacter(Character character);
     @Update
     public void updateCharacter(Character character);
     @Delete
     public void deleteCharacter(Character character);
-    @Query("select * from characters")
-    public List<Character> getAllCharacters();
-    @Query("select * from characters where name==:name")
-    public Character getCharacter(String name);
-    @Query("DELETE from characters")
+
+    @Query("select  * from Character")
+    List<Character> getAll();
+
+    @Query("select * from Character where id==:id")
+    public Character getCharacter(int id);
+    @Query("DELETE from Character")
     public void deleteAll();
 
 }

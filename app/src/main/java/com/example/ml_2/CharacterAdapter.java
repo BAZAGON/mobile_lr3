@@ -1,6 +1,5 @@
 package com.example.ml_2;
 
-import static java.security.AccessController.getContext;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -43,7 +42,7 @@ public class CharacterAdapter  extends RecyclerView.Adapter<CharacterAdapter.Vie
             Glide
                     .with(context)
                     .load(state.getPictureResourse())
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.imageView);
 
         holder.nameView.setText(state.getName());

@@ -1,6 +1,9 @@
 package com.example.ml_2;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,13 +36,19 @@ public class Detail extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView2);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        DBRepository rep = new DBRepository(getApplication());
+        Character character;
+
+
         EpisodeAdapter episodeAdapter = new EpisodeAdapter(Detail.this, new String[0]);
         recyclerView.setAdapter(episodeAdapter);
 
+        int id = getIntent().getIntExtra("ID",0);
         String name = getIntent().getStringExtra("NAME");
         String Image = getIntent().getStringExtra("IMAGE");
         String[] description = getIntent().getStringArrayExtra("DESCRIPTION");
 
+        character = rep.getCharacter(id);
         TextView Dname = findViewById(R.id.DetName);
         ImageView Dimage = findViewById(R.id.DetImage);
 
@@ -51,16 +60,26 @@ public class Detail extends AppCompatActivity {
 
         Dname.setText(name);
 
-        new Detail.MyAsyncTask(description,recyclerView).execute();
+       if(IsOnline()){
+           new Detail.MyAsyncTask(description,recyclerView,character).execute();
+           rep.UpdateCharacter(character);
+       }
+      else {
+           EpisodeAdapter adapter = new EpisodeAdapter(Detail.this, character.description);
+           recyclerView.setAdapter(adapter);
+       }
+
     }
         private class MyAsyncTask extends AsyncTask<String, Void, String[]> {
 
             String[] des;
             RecyclerView recyclerView;
+            Character character;
 
-            public MyAsyncTask(String[] des, RecyclerView recyclerView) {
+            public MyAsyncTask(String[] des, RecyclerView recyclerView, Character character) {
                 this.des = des;
                 this.recyclerView = recyclerView;
+                this.character = character;
             }
 
             @Override
@@ -99,10 +118,15 @@ public class Detail extends AppCompatActivity {
             }
             protected void onPostExecute(String[] res) {
                 EpisodeAdapter adapter = new EpisodeAdapter(Detail.this, res);
+                character.description = res;
                 recyclerView.setAdapter(adapter);
             }
-
         }
+
+    protected boolean IsOnline(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
 
 }
 

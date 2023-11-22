@@ -1,5 +1,7 @@
 package com.example.ml_2;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -8,32 +10,39 @@ import androidx.room.TypeConverters;
 
 import com.google.gson.annotations.SerializedName;
 
-@Entity(tableName = "characters")
+@Entity
 public class Character {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+
+    @Nullable
     @ColumnInfo(name = "name")
     @SerializedName("name")
     public String name;
 
+    @Nullable
     @ColumnInfo(name = "image")
     @SerializedName("image")
     public String PictureResourse;
 
+    @Nullable
     @TypeConverters({ArrayConverter.class})
     @ColumnInfo(name = "episode")
     @SerializedName("episode")
     public String[] description;
 
-    @Ignore
     public Character(){}
 
-    public Character(String name, String picture, String[] description) {
+    public Character(int id, String name, String picture, String[] description) {
+        this.id = id;
         this.name = name;
         this.PictureResourse = picture;
         this.description = description;
     }
 
+    public int getId(){return this.id;}
+    public void setId(int id){this.id = id;}
     public String getName() {
         return this.name;
     }
